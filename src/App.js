@@ -53,7 +53,10 @@ function App() {
       getSolflareWallet(),
       getSlopeWallet(),
       getTorusWallet({
-        options: { clientId: "Get a client ID @ https://developer.tor.us" },
+        options: {
+          clientId:
+            "BFtJ4A7RZJ-S7wOPqtmMXxqv3c7bwauL7K4xyRhy6_T8sjGbW5vzjvAtWFt1SAyD2ivdMquSH4ulD0BkJrHKYYc",
+        },
       }),
       getLedgerWallet(),
       getBloctoWallet({ network }),
