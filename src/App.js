@@ -1,109 +1,71 @@
 import "./App.css";
-import {
-  ConnectionProvider,
-  WalletProvider,
-  useConnection,
-  useWallet,
-} from "@solana/wallet-adapter-react";
-import {
-  WalletAdapterNetwork,
-  WalletNotConnectedError,
-} from "@solana/wallet-adapter-base";
-import {
-  getBloctoWallet,
-  getLedgerWallet,
-  getPhantomWallet,
-  getSlopeWallet,
-  getSolflareWallet,
-  getSolletExtensionWallet,
-  getSolletWallet,
-  getTorusWallet,
-  getMathWallet,
-  getCoin98Wallet,
-  getBitpieWallet,
-  getSafePalWallet,
-  getSolflareWebWallet,
-  getSolongWallet,
-} from "@solana/wallet-adapter-wallets";
-import {
-  WalletModalProvider,
-  WalletDisconnectButton,
-  WalletMultiButton,
-} from "@solana/wallet-adapter-react-ui";
-import {
-  clusterApiUrl,
-  Keypair,
-  SystemProgram,
-  Transaction,
-} from "@solana/web3.js";
+import // ConnectionProvider,
+// WalletProvider,
+// useConnection,
+// useWallet,
+"@solana/wallet-adapter-react";
+// import {
+//   WalletAdapterNetwork,
+//   WalletNotConnectedError,
+// } from "@solana/wallet-adapter-base";
+// import {
+//   WalletModalProvider,
+//   WalletDisconnectButton,
+//   WalletMultiButton,
+// } from "@solana/wallet-adapter-react-ui";
+// import {
+//   clusterApiUrl,
+//   Keypair,
+//   SystemProgram,
+//   Transaction,
+// } from "@solana/web3.js";
 import React, { useMemo, useCallback } from "react";
+import TestApp from "./TestApp";
+import { BrowserRouter, Router, Switch, Route } from "react-router-dom";
+import WalletConnect from "./component/WalletConnect";
+import SolanaProgram from "./component/SolanaProgram";
 
 function App() {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
-  const network = WalletAdapterNetwork.Devnet;
+  // const network = WalletAdapterNetwork.Devnet;
 
   // You can also provide a custom RPC endpoint
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  // const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking --
   // Only the wallets you configure here will be compiled into your application
-  const wallets = useMemo(
-    () => [
-      getPhantomWallet(),
-      getSolflareWallet(),
-      getSlopeWallet(),
-      getTorusWallet({
-        options: {
-          clientId:
-            "BFtJ4A7RZJ-S7wOPqtmMXxqv3c7bwauL7K4xyRhy6_T8sjGbW5vzjvAtWFt1SAyD2ivdMquSH4ulD0BkJrHKYYc",
-        },
-      }),
-      getLedgerWallet(),
-      getBloctoWallet({ network }),
-      getSolletWallet({ network }),
-      getSolletExtensionWallet({ network }),
-      getMathWallet(),
-      getCoin98Wallet(),
-      getBitpieWallet(),
-      getSafePalWallet(),
-      getSolflareWebWallet(),
-      getSolongWallet(),
-    ],
-    [network]
-  );
 
-  const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
+  // const { connection } = useConnection();
+  // const { publicKey, sendTransaction } = useWallet();
 
-  const onClick = useCallback(async () => {
-    if (!publicKey) throw new WalletNotConnectedError();
+  // const onClick = useCallback(async () => {
+  //   if (!publicKey) throw new WalletNotConnectedError();
 
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: publicKey,
-        toPubkey: Keypair.generate().publicKey,
-        lamports: 1,
-      })
-    );
+  //   const transaction = new Transaction().add(
+  //     SystemProgram.transfer({
+  //       fromPubkey: publicKey,
+  //       toPubkey: Keypair.generate().publicKey,
+  //       lamports: 1,
+  //     })
+  //   );
 
-    const signature = await sendTransaction(transaction, connection);
+  //   const signature = await sendTransaction(transaction, connection);
 
-    await connection.confirmTransaction(signature, "processed");
-  }, [publicKey, sendTransaction, connection]);
+  //   await connection.confirmTransaction(signature, "processed");
+  // }, [publicKey, sendTransaction, connection]);
   return (
-    <div className="App">
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider logo="http://dev.marketplace.nightlifecoins.com/favicon/android-icon-192x192.png">
-            <WalletMultiButton />
-            <WalletDisconnectButton />
-          </WalletModalProvider>
-        </WalletProvider>
-      </ConnectionProvider>
-      {/* <button onClick={onClick} disabled={!publicKey}>
+    <BrowserRouter>
+      <Switch>
+        <div className="App">
+          <Route exact path="/walletconnect" component={WalletConnect} />
+          <Route exact path="/" component={SolanaProgram} />
+          {/* <button onClick={onClick} disabled={!publicKey}>
         Send 1 lamport to a random address!
       </button> */}
-    </div>
+          {/* <TestApp /> */}
+        </div>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
